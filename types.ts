@@ -51,4 +51,4 @@ export interface ChefProfile {
   }
 }
 
-export type MenuCategory = 'appetizers' | 'entrees' | 'desserts' | 'beverages' | 'all'
+export type MenuCategory = 'appetizers' | 'steaks' | 'sides' | 'desserts' | 'beverages' | 'all'
