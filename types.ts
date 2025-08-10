@@ -12,88 +12,77 @@ export interface CosmicObject {
 
 export interface MenuItem extends CosmicObject {
   metadata: {
-    name: string;
+    dish_name: string;
     description: string;
-    price: number;
-    category: string;
-    image?: {
-      imgix_url: string;
-      alt_text?: string;
+    price: string;
+    category: {
+      key: string;
+      value: string;
     };
-    dietary_restrictions?: string[];
-    ingredients?: string[];
-    spice_level?: number;
-    featured?: boolean;
-    available?: boolean;
-    dish_name?: string;
+    chefs_special?: boolean;
     dish_photo?: {
+      url: string;
       imgix_url: string;
-      alt_text?: string;
     };
     wine_pairing?: {
+      id: string;
+      slug: string;
+      title: string;
+      type: string;
       metadata: {
         wine_name: string;
         vineyard: string;
-        year: string;
+        year?: string;
+        region?: string;
+        tasting_notes?: string;
         price_per_glass?: string;
+        price_per_bottle?: string;
+        wine_photo?: {
+          url: string;
+          imgix_url: string;
+        };
       };
     };
-    chefs_special?: boolean;
   };
 }
 
-export interface Chef extends CosmicObject {
+export interface ChefProfile extends CosmicObject {
   metadata: {
-    // Existing fields used in the app
-    name: string;
+    chef_name: string;
     title: string;
     bio: string;
-    experience_years: number;
-    specialties: string[] | string; // Accept both array and comma-separated string
-    image?: {
-      imgix_url: string;
-      alt_text?: string;
-    };
-    awards?: string[];
-    signature_dish?: string;
-
-    // Additional optional fields to support current CMS model
-    chef_name?: string;
-    chef_photo?: {
-      imgix_url: string;
-      alt_text?: string;
-    };
     years_experience?: number;
-  };
-}
-
-// Add missing ChefProfile type (alias for Chef)
-export type ChefProfile = Chef;
-
-export interface WineItem extends CosmicObject {
-  metadata: {
-    name: string;
-    type: string;
-    vintage: number;
-    region: string;
-    price: number;
-    description: string;
-    alcohol_content: number;
-    serving_temperature?: string;
-    food_pairing?: string[];
-    image?: {
+    specialties?: string;
+    chef_photo?: {
+      url: string;
       imgix_url: string;
-      alt_text?: string;
     };
-    availability?: boolean;
-    awards?: string[];
   };
 }
 
-// Add missing WinePairing type (alias for WineItem)
-export type WinePairing = WineItem;
+// Alias for backward compatibility
+export type Chef = ChefProfile;
 
-// Add missing MenuCategory type
+export interface WinePairing extends CosmicObject {
+  metadata: {
+    wine_name: string;
+    vineyard: string;
+    year?: string;
+    region?: string;
+    tasting_notes?: string;
+    price_per_glass?: string;
+    price_per_bottle?: string;
+    wine_photo?: {
+      url: string;
+      imgix_url: string;
+    };
+  };
+}
+
+// Alias for backward compatibility
+export type WineItem = WinePairing;
+
+// Menu Category type
 export type MenuCategory = 'steaks' | 'appetizers' | 'sides' | 'desserts';
 
 // Contact Form Types
