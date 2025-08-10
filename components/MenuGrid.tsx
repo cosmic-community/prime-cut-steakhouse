@@ -49,7 +49,8 @@ export default function MenuGrid({ menuItems }: MenuGridProps) {
       }
       
       if (categoryKey && categories[categoryKey]) {
-        categories[categoryKey].push(item)
+        // Use optional chaining to satisfy noUncheckedIndexedAccess and avoid undefined access
+        categories[categoryKey]?.push(item)
       }
     })
 
