@@ -33,50 +33,70 @@ export default async function ChefsPage() {
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-            {chefs.map((chef: ChefProfile) => (
-              <div key={chef.id} className="group">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                  {/* Chef Photo */}
-                  <div className="relative overflow-hidden rounded-lg aspect-[3/4]">
-                    <img
-                      src={`${chef.metadata.image?.imgix_url}?w=600&h=800&fit=crop&auto=format,compress`}
-                      alt={chef.metadata.name}
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
+            {chefs.map((chef: ChefProfile) => {
+              const name =
+                chef.metadata.name ?? chef.metadata.chef_name ?? chef.title
+              const imgUrl =
+                chef.metadata.image?.imgix_url ??
+                chef.metadata.chef_photo?.imgix_url
+              const years =
+                chef.metadata.experience_years ??
+                chef.metadata.years_experience ??
+                undefined
+              const specialtiesVal = chef.metadata.specialties
+              const specialtiesText = Array.isArray(specialtiesVal)
+                ? specialtiesVal.join(', ')
+                : specialtiesVal || undefined
 
-                  {/* Chef Info */}
-                  <div className="space-y-4">
-                    <div>
-                      <h2 className="text-3xl font-bold text-white mb-2">{chef.metadata.name}</h2>
-                      <p className="text-amber-600 text-lg font-semibold">{chef.metadata.title}</p>
+              return (
+                <div key={chef.id} className="group">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    {/* Chef Photo */}
+                    <div className="relative overflow-hidden rounded-lg aspect-[3/4]">
+                      {imgUrl ? (
+                        <img
+                          src={`${imgUrl}?w=600&h=800&fit=crop&auto=format,compress`}
+                          alt={name}
+                          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-neutral-800" />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
 
-                    {chef.metadata.experience_years && (
-                      <div className="flex items-center space-x-2 text-gray-400">
-                        <span className="text-2xl">👨‍🍳</span>
-                        <span>{chef.metadata.experience_years} Years Experience</span>
+                    {/* Chef Info */}
+                    <div className="space-y-4">
+                      <div>
+                        <h2 className="text-3xl font-bold text-white mb-2">{name}</h2>
+                        <p className="text-amber-600 text-lg font-semibold">{chef.metadata.title}</p>
                       </div>
-                    )}
 
-                    <div 
-                      className="text-gray-300 prose prose-invert prose-lg max-w-none"
-                      dangerouslySetInnerHTML={{ __html: chef.metadata.bio }}
-                    />
+                      {typeof years === 'number' && (
+                        <div className="flex items-center space-x-2 text-gray-400">
+                          <span className="text-2xl">👨‍🍳</span>
+                          <span>{years} Years Experience</span>
+                        </div>
+                      )}
 
-                    {chef.metadata.specialties && (
-                      <div className="pt-4 border-t border-gray-800">
-                        <h3 className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">
-                          Specialties
-                        </h3>
-                        <p className="text-gray-400">{chef.metadata.specialties.join(', ')}</p>
-                      </div>
-                    )}
+                      <div 
+                        className="text-gray-300 prose prose-invert prose-lg max-w-none"
+                        dangerouslySetInnerHTML={{ __html: chef.metadata.bio || '' }}
+                      />
+
+                      {specialtiesText && (
+                        <div className="pt-4 border-t border-gray-800">
+                          <h3 className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">
+                            Specialties
+                          </h3>
+                          <p className="text-gray-400">{specialtiesText}</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>

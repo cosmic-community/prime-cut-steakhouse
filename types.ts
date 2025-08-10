@@ -44,17 +44,26 @@ export interface MenuItem extends CosmicObject {
 
 export interface Chef extends CosmicObject {
   metadata: {
+    // Existing fields used in the app
     name: string;
     title: string;
     bio: string;
     experience_years: number;
-    specialties: string[];
+    specialties: string[] | string; // Accept both array and comma-separated string
     image?: {
       imgix_url: string;
       alt_text?: string;
     };
     awards?: string[];
     signature_dish?: string;
+
+    // Additional optional fields to support current CMS model
+    chef_name?: string;
+    chef_photo?: {
+      imgix_url: string;
+      alt_text?: string;
+    };
+    years_experience?: number;
   };
 }
 
