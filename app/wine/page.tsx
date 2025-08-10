@@ -38,40 +38,40 @@ export default async function WinePage() {
                 {/* Wine Image */}
                 <div className="relative h-64 overflow-hidden">
                   <img
-                    src={`${wine.metadata.wine_photo?.imgix_url}?w=800&h=600&fit=crop&auto=format,compress`}
-                    alt={wine.metadata.wine_name}
+                    src={`${wine.metadata.image?.imgix_url}?w=800&h=600&fit=crop&auto=format,compress`}
+                    alt={wine.metadata.name}
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                   
                   {/* Price Badge */}
                   <div className="absolute top-4 right-4 bg-amber-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    {wine.metadata.price_per_glass}/glass
+                    ${wine.metadata.price}/glass
                   </div>
                 </div>
 
                 {/* Wine Details */}
                 <div className="p-6 space-y-4">
                   <div>
-                    <h3 className="text-2xl font-bold text-white mb-2">{wine.metadata.wine_name}</h3>
-                    <p className="text-amber-600 font-semibold">{wine.metadata.vineyard}</p>
+                    <h3 className="text-2xl font-bold text-white mb-2">{wine.metadata.name}</h3>
+                    <p className="text-amber-600 font-semibold">{wine.metadata.region}</p>
                   </div>
 
                   <div className="flex items-center justify-between text-sm text-gray-400">
-                    {wine.metadata.year && <span className="font-medium">{wine.metadata.year}</span>}
+                    {wine.metadata.vintage && <span className="font-medium">{wine.metadata.vintage}</span>}
                     {wine.metadata.region && <span>{wine.metadata.region}</span>}
                   </div>
 
-                  {wine.metadata.tasting_notes && (
+                  {wine.metadata.description && (
                     <p className="text-gray-300 leading-relaxed">
-                      {wine.metadata.tasting_notes}
+                      {wine.metadata.description}
                     </p>
                   )}
 
                   <div className="pt-4 border-t border-gray-700 flex items-center justify-between">
                     <div>
                       <p className="text-sm text-gray-500">Per Bottle</p>
-                      <p className="text-xl font-bold text-white">{wine.metadata.price_per_bottle}</p>
+                      <p className="text-xl font-bold text-white">${wine.metadata.price}</p>
                     </div>
                     <span className="text-3xl">🍷</span>
                   </div>

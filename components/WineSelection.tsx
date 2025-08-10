@@ -24,11 +24,11 @@ export default function WineSelection({ wines }: WineSelectionProps) {
               key={wine.id} 
               className="bg-neutral-900 rounded-lg overflow-hidden border border-neutral-800 hover:border-amber-600 transition-all duration-300"
             >
-              {wine.metadata.wine_photo?.imgix_url && (
+              {wine.metadata.image?.imgix_url && (
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
-                    src={`${wine.metadata.wine_photo.imgix_url}?w=400&h=300&fit=crop&auto=format,compress`}
-                    alt={wine.metadata.wine_name}
+                    src={`${wine.metadata.image.imgix_url}?w=400&h=300&fit=crop&auto=format,compress`}
+                    alt={wine.metadata.name}
                     className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                     width={400}
                     height={300}
@@ -38,18 +38,18 @@ export default function WineSelection({ wines }: WineSelectionProps) {
               
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-2">
-                  {wine.metadata.wine_name}
+                  {wine.metadata.name}
                 </h3>
                 
                 <p className="text-amber-400 font-medium mb-2">
-                  {wine.metadata.vineyard}
+                  {wine.metadata.region}
                 </p>
                 
                 <div className="flex items-center gap-2 text-sm text-neutral-400 mb-3">
-                  {wine.metadata.year && (
-                    <span>{wine.metadata.year}</span>
+                  {wine.metadata.vintage && (
+                    <span>{wine.metadata.vintage}</span>
                   )}
-                  {wine.metadata.year && wine.metadata.region && (
+                  {wine.metadata.vintage && wine.metadata.region && (
                     <span>•</span>
                   )}
                   {wine.metadata.region && (
@@ -57,30 +57,26 @@ export default function WineSelection({ wines }: WineSelectionProps) {
                   )}
                 </div>
 
-                {wine.metadata.tasting_notes && (
+                {wine.metadata.description && (
                   <p className="text-neutral-300 text-sm mb-4 line-clamp-3">
-                    {wine.metadata.tasting_notes}
+                    {wine.metadata.description}
                   </p>
                 )}
 
                 <div className="flex justify-between items-center pt-4 border-t border-neutral-800">
-                  {wine.metadata.price_per_glass && (
-                    <div>
-                      <span className="text-xs text-neutral-400">Glass</span>
-                      <p className="font-semibold text-amber-400">
-                        {wine.metadata.price_per_glass}
-                      </p>
-                    </div>
-                  )}
+                  <div>
+                    <span className="text-xs text-neutral-400">Glass</span>
+                    <p className="font-semibold text-amber-400">
+                      ${wine.metadata.price}
+                    </p>
+                  </div>
                   
-                  {wine.metadata.price_per_bottle && (
-                    <div className="text-right">
-                      <span className="text-xs text-neutral-400">Bottle</span>
-                      <p className="font-semibold text-amber-400">
-                        {wine.metadata.price_per_bottle}
-                      </p>
-                    </div>
-                  )}
+                  <div className="text-right">
+                    <span className="text-xs text-neutral-400">Bottle</span>
+                    <p className="font-semibold text-amber-400">
+                      ${wine.metadata.price}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

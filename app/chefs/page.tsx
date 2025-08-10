@@ -39,8 +39,8 @@ export default async function ChefsPage() {
                   {/* Chef Photo */}
                   <div className="relative overflow-hidden rounded-lg aspect-[3/4]">
                     <img
-                      src={`${chef.metadata.chef_photo?.imgix_url}?w=600&h=800&fit=crop&auto=format,compress`}
-                      alt={chef.metadata.chef_name}
+                      src={`${chef.metadata.image?.imgix_url}?w=600&h=800&fit=crop&auto=format,compress`}
+                      alt={chef.metadata.name}
                       className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -49,14 +49,14 @@ export default async function ChefsPage() {
                   {/* Chef Info */}
                   <div className="space-y-4">
                     <div>
-                      <h2 className="text-3xl font-bold text-white mb-2">{chef.metadata.chef_name}</h2>
+                      <h2 className="text-3xl font-bold text-white mb-2">{chef.metadata.name}</h2>
                       <p className="text-amber-600 text-lg font-semibold">{chef.metadata.title}</p>
                     </div>
 
-                    {chef.metadata.years_experience && (
+                    {chef.metadata.experience_years && (
                       <div className="flex items-center space-x-2 text-gray-400">
                         <span className="text-2xl">👨‍🍳</span>
-                        <span>{chef.metadata.years_experience} Years Experience</span>
+                        <span>{chef.metadata.experience_years} Years Experience</span>
                       </div>
                     )}
 
@@ -70,7 +70,7 @@ export default async function ChefsPage() {
                         <h3 className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">
                           Specialties
                         </h3>
-                        <p className="text-gray-400">{chef.metadata.specialties}</p>
+                        <p className="text-gray-400">{chef.metadata.specialties.join(', ')}</p>
                       </div>
                     )}
                   </div>
