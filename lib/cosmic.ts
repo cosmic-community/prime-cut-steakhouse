@@ -12,6 +12,7 @@ if (!bucketSlug || !readKey) {
 const cosmic = createBucketClient({
   bucketSlug,
   readKey,
+  apiEnvironment: "staging"
 })
 
 export async function getMenuItems(): Promise<MenuItem[]> {
