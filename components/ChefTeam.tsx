@@ -1,5 +1,5 @@
 import { getChefProfiles } from '@/lib/cosmic'
-import { Chef } from '@/types'
+import { ChefProfile } from '@/types'
 
 export default async function ChefTeam() {
   const chefs = await getChefProfiles()
@@ -15,7 +15,7 @@ export default async function ChefTeam() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {chefs.map((chef: Chef) => (
+          {chefs.map((chef: ChefProfile) => (
             <div key={chef.id} className="bg-neutral-900 rounded-lg overflow-hidden group hover:shadow-2xl transition-shadow duration-300">
               <div className="flex flex-col md:flex-row">
                 <div className="md:w-1/3 relative">

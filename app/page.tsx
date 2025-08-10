@@ -1,31 +1,15 @@
 import Hero from '@/components/Hero'
 import FeaturedMenu from '@/components/FeaturedMenu'
-import WineSelection from '@/components/WineSelection'
 import ChefTeam from '@/components/ChefTeam'
-import { getChefsSpecials, getWinePairings, getChefProfiles } from '@/lib/cosmic'
+import WineSelection from '@/components/WineSelection'
 
-export default async function HomePage() {
-  const [featuredItems, wines, chefs] = await Promise.all([
-    getChefsSpecials(),
-    getWinePairings(),
-    getChefProfiles()
-  ])
-
+export default function Home() {
   return (
-    <div>
+    <main>
       <Hero />
-      
-      {featuredItems.length > 0 && (
-        <FeaturedMenu items={featuredItems} />
-      )}
-      
-      {wines.length > 0 && (
-        <WineSelection wines={wines.slice(0, 3)} />
-      )}
-      
-      {chefs.length > 0 && (
-        <ChefTeam chefs={chefs} />
-      )}
-    </div>
+      <FeaturedMenu />
+      <ChefTeam />
+      <WineSelection />
+    </main>
   )
 }

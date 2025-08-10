@@ -2,9 +2,11 @@ import { MenuItem } from '@/types'
 
 interface MenuItemCardProps {
   item: MenuItem
+  featured?: boolean
+  isSpecial?: boolean
 }
 
-export default function MenuItemCard({ item }: MenuItemCardProps) {
+export default function MenuItemCard({ item, featured, isSpecial }: MenuItemCardProps) {
   return (
     <div className="bg-neutral-800 rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-300">
       {/* Dish Image */}
@@ -25,7 +27,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
         
         {/* Chef's Special Badge */}
-        {item.metadata.chefs_special && (
+        {(item.metadata.chefs_special || featured || isSpecial) && (
           <div className="absolute top-4 left-4 bg-amber-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
             Chef's Special
           </div>
