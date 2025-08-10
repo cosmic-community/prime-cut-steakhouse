@@ -90,6 +90,11 @@ export function isChefProfile(obj: CosmicObject): obj is ChefProfile {
   return obj.type === 'chef-profiles';
 }
 
-// Utility types
-export type OptionalMetadata<T> = Partial<T['metadata']>;
+// Utility types - Fixed the type indexing issue
+export type OptionalMetadata<T extends CosmicObject> = Partial<T['metadata']>;
 export type CreateMenuItemData = Omit<MenuItem, 'id' | 'created_at' | 'modified_at'>;
+
+// Helper function to safely access metadata
+export function getMetadata<T extends CosmicObject>(obj: T): T['metadata'] {
+  return obj.metadata;
+}
