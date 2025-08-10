@@ -1,14 +1,14 @@
-import { getChefs } from '@/lib/cosmic'
-import { ChefProfile } from '@/types'
+import { getChefProfiles } from '@/lib/cosmic'
+import { Chef } from '@/types'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Our Chefs | Prime Cut Steakhouse',
-  description: 'Meet our talented culinary team at Prime Cut Steakhouse. Our award-winning chefs bring exceptional expertise and passion to every dish.',
+  description: 'Meet the talented culinary team at Prime Cut Steakhouse. Our chefs bring years of experience and passion for creating exceptional dining experiences.',
 }
 
 export default async function ChefsPage() {
-  const chefs = await getChefs()
+  const chefs = await getChefProfiles()
 
   return (
     <main className="min-h-screen bg-neutral-900">
@@ -18,96 +18,78 @@ export default async function ChefsPage() {
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ 
-            backgroundImage: `url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=2000&auto=format,compress')` 
+            backgroundImage: `url('https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=2000&auto=format,compress')` 
           }}
         />
         <div className="relative z-20 text-center px-4">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">Our Culinary Team</h1>
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">Our Chefs</h1>
           <p className="text-xl text-gray-200 max-w-2xl mx-auto">
-            Meet the exceptional chefs who bring passion, expertise, and innovation to every dish at Prime Cut Steakhouse
+            Meet the culinary artists behind Prime Cut's exceptional dining experience
           </p>
         </div>
       </section>
 
-      {/* Chefs Grid */}
+      {/* Chef Profiles */}
       <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-            {chefs.map((chef: ChefProfile) => {
-              const name = chef.metadata.chef_name ?? chef.title
-              const imgUrl = chef.metadata.chef_photo?.imgix_url
-              const years = chef.metadata.years_experience
-              const specialtiesVal = chef.metadata.specialties
-              const specialtiesText = Array.isArray(specialtiesVal)
-                ? specialtiesVal.join(', ')
-                : specialtiesVal || undefined
-
-              return (
+        <div className="max-w-6xl mx-auto">
+          {chefs.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-gray-400 text-xl">No chef profiles available at the moment.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              {chefs.map((chef: Chef) => (
                 <div key={chef.id} className="group">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                    {/* Chef Photo */}
-                    <div className="relative overflow-hidden rounded-lg aspect-[3/4]">
-                      {imgUrl ? (
+                  <div className="bg-neutral-800 rounded-lg overflow-hidden">
+                    {/* Chef Image */}
+                    <div className="relative h-80 overflow-hidden">
+                      {chef.metadata.chef_photo?.imgix_url ? (
                         <img
-                          src={`${imgUrl}?w=600&h=800&fit=crop&auto=format,compress`}
-                          alt={name}
+                          src={`${chef.metadata.chef_photo.imgix_url}?w=800&h=600&fit=crop&auto=format,compress`}
+                          alt={chef.metadata.chef_name}
                           className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                          width={800}
+                          height={600}
                         />
                       ) : (
-                        <div className="w-full h-full bg-neutral-800" />
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </div>
-
-                    {/* Chef Info */}
-                    <div className="space-y-4">
-                      <div>
-                        <h2 className="text-3xl font-bold text-white mb-2">{name}</h2>
-                        <p className="text-amber-600 text-lg font-semibold">{chef.metadata.title}</p>
-                      </div>
-
-                      {typeof years === 'number' && (
-                        <div className="flex items-center space-x-2 text-gray-400">
-                          <span className="text-2xl">👨‍🍳</span>
-                          <span>{years} Years Experience</span>
+                        <div className="w-full h-full bg-neutral-700 flex items-center justify-center">
+                          <span className="text-6xl">👨‍🍳</span>
                         </div>
                       )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                      
+                      {/* Years of Experience Badge */}
+                      {chef.metadata.years_experience && (
+                        <div className="absolute top-4 right-4 bg-amber-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                          {chef.metadata.years_experience} years
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Chef Details */}
+                    <div className="p-8 space-y-6">
+                      <div>
+                        <h3 className="text-3xl font-bold text-white mb-2">{chef.metadata.chef_name}</h3>
+                        <p className="text-amber-600 font-semibold text-lg">{chef.metadata.title}</p>
+                      </div>
 
                       <div 
-                        className="text-gray-300 prose prose-invert prose-lg max-w-none"
-                        dangerouslySetInnerHTML={{ __html: chef.metadata.bio || '' }}
+                        className="text-gray-300 leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: chef.metadata.bio }}
                       />
 
-                      {specialtiesText && (
-                        <div className="pt-4 border-t border-gray-800">
-                          <h3 className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">
-                            Specialties
-                          </h3>
-                          <p className="text-gray-400">{specialtiesText}</p>
+                      {chef.metadata.specialties && (
+                        <div className="pt-4 border-t border-gray-700">
+                          <h4 className="text-amber-600 font-semibold mb-2">Specialties:</h4>
+                          <p className="text-gray-300">{chef.metadata.specialties}</p>
                         </div>
                       )}
                     </div>
                   </div>
                 </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 px-4 bg-neutral-800">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Experience Our Culinary Excellence</h2>
-          <p className="text-gray-300 text-lg mb-8">
-            Join us for an unforgettable dining experience crafted by our talented team
-          </p>
-          <a
-            href="/menu"
-            className="inline-block bg-amber-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-amber-700 transition-colors"
-          >
-            View Our Menu
-          </a>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </main>
