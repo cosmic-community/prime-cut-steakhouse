@@ -1,5 +1,5 @@
 import { createBucketClient } from '@cosmicjs/sdk'
-import { MenuItem, WinePairing, ChefProfile, CosmicResponse, MenuCategory } from '@/types'
+import { MenuItem, WinePairing, ChefProfile, MenuCategory } from '@/types'
 
 export const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG as string,
@@ -24,6 +24,7 @@ export async function getMenuItems(): Promise<MenuItem[]> {
     
     return response.objects as MenuItem[];
   } catch (error) {
+    console.error('Error in getMenuItems:', error);
     if (hasStatus(error) && error.status === 404) {
       return [];
     }
@@ -45,6 +46,7 @@ export async function getMenuItemsByCategory(category: MenuCategory): Promise<Me
     
     return response.objects as MenuItem[];
   } catch (error) {
+    console.error(`Error in getMenuItemsByCategory for ${category}:`, error);
     if (hasStatus(error) && error.status === 404) {
       return [];
     }
@@ -66,6 +68,7 @@ export async function getChefsSpecials(): Promise<MenuItem[]> {
     
     return response.objects as MenuItem[];
   } catch (error) {
+    console.error('Error in getChefsSpecials:', error);
     if (hasStatus(error) && error.status === 404) {
       return [];
     }
@@ -92,6 +95,7 @@ export async function getMenuItem(slug: string): Promise<MenuItem | null> {
     
     return menuItem;
   } catch (error) {
+    console.error(`Error in getMenuItem for ${slug}:`, error);
     if (hasStatus(error) && error.status === 404) {
       return null;
     }
@@ -109,6 +113,7 @@ export async function getWinePairings(): Promise<WinePairing[]> {
     
     return response.objects as WinePairing[];
   } catch (error) {
+    console.error('Error in getWinePairings:', error);
     if (hasStatus(error) && error.status === 404) {
       return [];
     }
@@ -134,6 +139,7 @@ export async function getWinePairing(slug: string): Promise<WinePairing | null> 
     
     return wine;
   } catch (error) {
+    console.error(`Error in getWinePairing for ${slug}:`, error);
     if (hasStatus(error) && error.status === 404) {
       return null;
     }
@@ -151,6 +157,7 @@ export async function getChefProfiles(): Promise<ChefProfile[]> {
     
     return response.objects as ChefProfile[];
   } catch (error) {
+    console.error('Error in getChefProfiles:', error);
     if (hasStatus(error) && error.status === 404) {
       return [];
     }
@@ -176,6 +183,7 @@ export async function getChefProfile(slug: string): Promise<ChefProfile | null> 
     
     return chef;
   } catch (error) {
+    console.error(`Error in getChefProfile for ${slug}:`, error);
     if (hasStatus(error) && error.status === 404) {
       return null;
     }

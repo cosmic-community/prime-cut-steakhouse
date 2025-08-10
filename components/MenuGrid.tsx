@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { getMenuItems } from '@/lib/cosmic'
 import MenuItemCard from '@/components/MenuItemCard'
-import type { MenuItemWithWine } from '@/types'
+import type { MenuItem } from '@/types'
 
 const categories = [
   { key: 'all', label: 'All Items' },
@@ -14,8 +14,8 @@ const categories = [
 ]
 
 export default function MenuGrid() {
-  const [menuItems, setMenuItems] = useState<MenuItemWithWine[]>([])
-  const [filteredItems, setFilteredItems] = useState<MenuItemWithWine[]>([])
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([])
+  const [filteredItems, setFilteredItems] = useState<MenuItem[]>([])
   const [activeCategory, setActiveCategory] = useState('all')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -24,7 +24,9 @@ export default function MenuGrid() {
     async function fetchMenuItems() {
       try {
         setLoading(true)
+        console.log('Fetching menu items...')
         const items = await getMenuItems()
+        console.log('Fetched menu items:', items)
         setMenuItems(items)
         setFilteredItems(items)
       } catch (err) {
@@ -39,13 +41,18 @@ export default function MenuGrid() {
   }, [])
 
   useEffect(() => {
+    console.log('Filtering items for category:', activeCategory)
+    console.log('Available items:', menuItems.length)
+    
     if (activeCategory === 'all') {
       setFilteredItems(menuItems)
     } else {
-      const filtered = menuItems.filter(item => 
-        item.metadata.category?.key === activeCategory || 
-        item.metadata.category?.value?.toLowerCase() === activeCategory
-      )
+      const filtered = menuItems.filter(item => {
+        const categoryKey = item.metadata?.category?.key
+        console.log(`Item "${item.metadata?.dish_name}" has category:`, categoryKey)
+        return categoryKey === activeCategory
+      })
+      console.log('Filtered items:', filtered.length)
       setFilteredItems(filtered)
     }
   }, [activeCategory, menuItems])
@@ -54,6 +61,7 @@ export default function MenuGrid() {
     return (
       <div className="text-center py-12">
         <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-accent-400"></div>
+        <p className="mt-4 text-neutral-400">Loading menu items...</p>
       </div>
     )
   }
@@ -85,16 +93,30 @@ export default function MenuGrid() {
         ))}
       </div>
 
-      {/* Menu Items Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {filteredItems.map((item) => (
-          <MenuItemCard key={item.id} item={item} />
-        ))}
-      </div>
+      {/* Debug information */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="mb-8 p-4 bg-neutral-800 rounded-lg text-sm text-neutral-400">
+          <p>Total menu items: {menuItems.length}</p>
+          <p>Filtered items: {filteredItems.length}</p>
+          <p>Active category: {activeCategory}</p>
+        </div>
+      )}
 
-      {filteredItems.length === 0 && (
+      {/* Menu Items Grid */}
+      {filteredItems.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredItems.map((item) => (
+            <MenuItemCard key={item.id} item={item} />
+          ))}
+        </div>
+      ) : (
         <div className="text-center py-12">
-          <p className="text-neutral-400">No items found in this category.</p>
+          <p className="text-neutral-400">
+            {menuItems.length === 0 
+              ? 'No menu items found.' 
+              : `No items found in the "${categories.find(c => c.key === activeCategory)?.label}" category.`
+            }
+          </p>
         </div>
       )}
     </div>

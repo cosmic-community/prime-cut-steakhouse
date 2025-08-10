@@ -10,30 +10,24 @@ export interface CosmicObject {
   modified_at: string;
   status: string;
   published_at: string;
+  bucket?: string;
+  thumbnail?: string;
+  published_at?: string;
+  modified_by?: string;
+  created_by?: string;
 }
 
-// Menu Item interface
-export interface MenuItem extends CosmicObject {
-  type: 'menu-items';
-  metadata: {
-    dish_name: string;
-    description: string;
-    price: string;
-    category?: {
-      key: string;
-      value: string;
-    };
-    chefs_special?: boolean;
-    dish_photo?: {
-      url: string;
-      imgix_url: string;
-    };
-    wine_pairing?: WinePairing;
-  };
+// File/Media interface
+export interface CosmicFile {
+  url: string;
+  imgix_url: string;
 }
 
-// Menu Item with Wine (alias for MenuItem with wine pairing)
-export type MenuItemWithWine = MenuItem;
+// Category interface for select-dropdown metafields
+export interface MenuCategoryOption {
+  key: string;
+  value: string;
+}
 
 // Wine Pairing interface
 export interface WinePairing extends CosmicObject {
@@ -46,12 +40,26 @@ export interface WinePairing extends CosmicObject {
     tasting_notes?: string;
     price_per_glass?: string;
     price_per_bottle?: string;
-    wine_photo?: {
-      url: string;
-      imgix_url: string;
-    };
+    wine_photo?: CosmicFile;
   };
 }
+
+// Menu Item interface - Updated to match actual API response
+export interface MenuItem extends CosmicObject {
+  type: 'menu-items';
+  metadata: {
+    dish_name: string;
+    description: string;
+    price: string;
+    category: MenuCategoryOption;
+    chefs_special: boolean;
+    dish_photo?: CosmicFile;
+    wine_pairing?: WinePairing;
+  };
+}
+
+// Menu Item with Wine (alias for MenuItem with wine pairing)
+export type MenuItemWithWine = MenuItem;
 
 // Chef Profile interface
 export interface ChefProfile extends CosmicObject {
@@ -62,10 +70,7 @@ export interface ChefProfile extends CosmicObject {
     bio: string;
     years_experience?: number;
     specialties?: string;
-    chef_photo?: {
-      url: string;
-      imgix_url: string;
-    };
+    chef_photo?: CosmicFile;
   };
 }
 
@@ -93,7 +98,7 @@ export function isChefProfile(obj: CosmicObject): obj is ChefProfile {
   return obj.type === 'chef-profiles';
 }
 
-// Utility types - Fixed the type indexing issue
+// Utility types
 export type OptionalMetadata<T extends CosmicObject> = Partial<T['metadata']>;
 export type CreateMenuItemData = Omit<MenuItem, 'id' | 'created_at' | 'modified_at'>;
 
