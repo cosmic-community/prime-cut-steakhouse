@@ -3,9 +3,10 @@ import { MenuItem } from '@/types'
 interface MenuItemCardProps {
   item: MenuItem
   isSpecial?: boolean
+  featured?: boolean
 }
 
-export default function MenuItemCard({ item, isSpecial = false }: MenuItemCardProps) {
+export default function MenuItemCard({ item, isSpecial = false, featured = false }: MenuItemCardProps) {
   const { metadata } = item
   
   if (!metadata) {
@@ -23,7 +24,7 @@ export default function MenuItemCard({ item, isSpecial = false }: MenuItemCardPr
 
   return (
     <div className={`bg-neutral-800 rounded-lg overflow-hidden hover:bg-neutral-750 transition-colors duration-300 ${
-      isSpecial || chefs_special ? 'ring-2 ring-accent-400' : ''
+      isSpecial || chefs_special || featured ? 'ring-2 ring-accent-400' : ''
     }`}>
       {/* Dish Photo */}
       {dish_photo?.imgix_url && (
@@ -40,7 +41,7 @@ export default function MenuItemCard({ item, isSpecial = false }: MenuItemCardPr
 
       <div className="p-6">
         {/* Chef's Special Badge */}
-        {(isSpecial || chefs_special) && (
+        {(isSpecial || chefs_special || featured) && (
           <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-accent-400 text-neutral-900 mb-4">
             ⭐ Chef's Special
           </div>
