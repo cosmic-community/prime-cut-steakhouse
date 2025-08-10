@@ -27,18 +27,18 @@ export default function WineSelection({ wines }: WineSelectionProps) {
               {wine.metadata.wine_photo?.imgix_url && (
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
-                    src={`${wine.metadata.wine_photo.imgix_url}?w=400&h=300&fit=crop&auto=format,compress`}
-                    alt={wine.metadata.wine_name}
+                    src={`${wine.metadata.wine_photo.imgix_url}?w=800&h=600&fit=crop&auto=format,compress`}
+                    alt={wine.metadata.wine_name || wine.title}
                     className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                    width={400}
-                    height={300}
+                    width={800}
+                    height={600}
                   />
                 </div>
               )}
               
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-2 text-white">
-                  {wine.metadata.wine_name}
+                  {wine.metadata.wine_name || wine.title}
                 </h3>
                 
                 <p className="text-amber-400 font-medium mb-2">

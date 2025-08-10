@@ -45,7 +45,7 @@ export default async function WinePage() {
                     {wine.metadata.wine_photo?.imgix_url ? (
                       <img
                         src={`${wine.metadata.wine_photo.imgix_url}?w=800&h=600&fit=crop&auto=format,compress`}
-                        alt={wine.metadata.wine_name}
+                        alt={wine.metadata.wine_name || wine.title}
                         className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                         width={800}
                         height={600}
@@ -68,13 +68,21 @@ export default async function WinePage() {
                   {/* Wine Details */}
                   <div className="p-6 space-y-4">
                     <div>
-                      <h3 className="text-2xl font-bold text-white mb-2">{wine.metadata.wine_name}</h3>
-                      <p className="text-amber-600 font-semibold">{wine.metadata.vineyard}</p>
+                      <h3 className="text-2xl font-bold text-white mb-2">
+                        {wine.metadata.wine_name || wine.title}
+                      </h3>
+                      <p className="text-amber-600 font-semibold">
+                        {wine.metadata.vineyard}
+                      </p>
                     </div>
 
                     <div className="flex items-center justify-between text-sm text-gray-400">
-                      {wine.metadata.year && <span className="font-medium">{wine.metadata.year}</span>}
-                      {wine.metadata.region && <span>{wine.metadata.region}</span>}
+                      {wine.metadata.year && (
+                        <span className="font-medium">{wine.metadata.year}</span>
+                      )}
+                      {wine.metadata.region && (
+                        <span>{wine.metadata.region}</span>
+                      )}
                     </div>
 
                     {wine.metadata.tasting_notes && (
