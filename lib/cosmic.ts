@@ -1,9 +1,17 @@
 import { createBucketClient } from '@cosmicjs/sdk'
 import { MenuItem, WinePairing, ChefProfile } from '@/types'
 
+// Ensure environment variables are available
+const bucketSlug = process.env.COSMIC_BUCKET_SLUG
+const readKey = process.env.COSMIC_READ_KEY
+
+if (!bucketSlug || !readKey) {
+  throw new Error('Missing required Cosmic environment variables. Please check COSMIC_BUCKET_SLUG and COSMIC_READ_KEY are set.')
+}
+
 const cosmic = createBucketClient({
-  bucketSlug: process.env.COSMIC_BUCKET_SLUG as string,
-  readKey: process.env.COSMIC_READ_KEY as string,
+  bucketSlug,
+  readKey,
 })
 
 export async function getMenuItems(): Promise<MenuItem[]> {
@@ -18,6 +26,7 @@ export async function getMenuItems(): Promise<MenuItem[]> {
     if (error.status === 404) {
       return []
     }
+    console.error('Error fetching menu items:', error)
     throw error
   }
 }
@@ -34,6 +43,7 @@ export async function getChefsSpecials(): Promise<MenuItem[]> {
     if (error.status === 404) {
       return []
     }
+    console.error('Error fetching chef specials:', error)
     throw error
   }
 }
@@ -50,6 +60,7 @@ export async function getWinePairings(): Promise<WinePairing[]> {
     if (error.status === 404) {
       return []
     }
+    console.error('Error fetching wine pairings:', error)
     throw error
   }
 }
@@ -66,6 +77,7 @@ export async function getChefs(): Promise<ChefProfile[]> {
     if (error.status === 404) {
       return []
     }
+    console.error('Error fetching chefs:', error)
     throw error
   }
 }
