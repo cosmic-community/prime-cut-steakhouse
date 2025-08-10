@@ -1,122 +1,114 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { getMenuItems } from '@/lib/cosmic'
-import MenuItemCard from '@/components/MenuItemCard'
-import type { MenuItem } from '@/types'
+import { useState, useMemo } from 'react'
+import { MenuItem, MenuCategory } from '@/types'
+import MenuItemCard from './MenuItemCard'
+import CategoryFilter from './CategoryFilter'
 
-const categories = [
-  { key: 'all', label: 'All Items' },
-  { key: 'steaks', label: 'Steaks' },
-  { key: 'appetizers', label: 'Appetizers' },
-  { key: 'sides', label: 'Sides' },
-  { key: 'desserts', label: 'Desserts' }
-]
+interface MenuGridProps {
+  menuItems: MenuItem[]
+}
 
-export default function MenuGrid() {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([])
-  const [filteredItems, setFilteredItems] = useState<MenuItem[]>([])
-  const [activeCategory, setActiveCategory] = useState('all')
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+export default function MenuGrid({ menuItems }: MenuGridProps) {
+  const [selectedCategory, setSelectedCategory] = useState<MenuCategory | 'all'>('all')
 
-  useEffect(() => {
-    async function fetchMenuItems() {
-      try {
-        setLoading(true)
-        console.log('Fetching menu items...')
-        const items = await getMenuItems()
-        console.log('Fetched menu items:', items)
-        setMenuItems(items)
-        setFilteredItems(items)
-      } catch (err) {
-        console.error('Error fetching menu items:', err)
-        setError('Failed to load menu items')
-      } finally {
-        setLoading(false)
+  // Filter menu items based on selected category
+  const filteredItems = useMemo(() => {
+    if (selectedCategory === 'all') {
+      return menuItems
+    }
+    return menuItems.filter(item => 
+      item.metadata?.category?.key === selectedCategory
+    )
+  }, [menuItems, selectedCategory])
+
+  // Group items by category for display
+  const itemsByCategory = useMemo(() => {
+    const categories: Record<string, MenuItem[]> = {
+      steaks: [],
+      appetizers: [],
+      sides: [],
+      desserts: []
+    }
+
+    filteredItems.forEach(item => {
+      const categoryKey = item.metadata?.category?.key
+      if (categoryKey && categories[categoryKey]) {
+        categories[categoryKey].push(item)
       }
-    }
+    })
 
-    fetchMenuItems()
-  }, [])
-
-  useEffect(() => {
-    console.log('Filtering items for category:', activeCategory)
-    console.log('Available items:', menuItems.length)
-    
-    if (activeCategory === 'all') {
-      setFilteredItems(menuItems)
-    } else {
-      const filtered = menuItems.filter(item => {
-        const categoryKey = item.metadata?.category?.key
-        console.log(`Item "${item.metadata?.dish_name}" has category:`, categoryKey)
-        return categoryKey === activeCategory
-      })
-      console.log('Filtered items:', filtered.length)
-      setFilteredItems(filtered)
-    }
-  }, [activeCategory, menuItems])
-
-  if (loading) {
-    return (
-      <div className="text-center py-12">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-accent-400"></div>
-        <p className="mt-4 text-neutral-400">Loading menu items...</p>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-red-400">{error}</p>
-      </div>
-    )
-  }
+    return categories
+  }, [filteredItems])
 
   return (
-    <div>
+    <div className="space-y-12">
       {/* Category Filter */}
-      <div className="flex flex-wrap justify-center gap-4 mb-12">
-        {categories.map((category) => (
-          <button
-            key={category.key}
-            onClick={() => setActiveCategory(category.key)}
-            className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
-              activeCategory === category.key
-                ? 'bg-accent-600 text-white shadow-lg'
-                : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700 hover:text-white border border-neutral-700'
-            }`}
-          >
-            {category.label}
-          </button>
-        ))}
-      </div>
+      <CategoryFilter 
+        selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
+      />
 
-      {/* Debug information */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="mb-8 p-4 bg-neutral-800 rounded-lg text-sm text-neutral-400">
-          <p>Total menu items: {menuItems.length}</p>
-          <p>Filtered items: {filteredItems.length}</p>
-          <p>Active category: {activeCategory}</p>
+      {/* Menu Items Display */}
+      {selectedCategory === 'all' ? (
+        // Show all categories when 'all' is selected
+        <>
+          {Object.entries(itemsByCategory).map(([category, items]) => (
+            items.length > 0 && (
+              <div key={category} className="space-y-8">
+                <h2 className="text-3xl font-bold text-white capitalize text-center">
+                  {category === 'steaks' ? 'Prime Steaks' : 
+                   category === 'appetizers' ? 'Appetizers' :
+                   category === 'sides' ? 'Sides' :
+                   'Desserts'}
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {items.map((item) => (
+                    <MenuItemCard key={item.id} item={item} />
+                  ))}
+                </div>
+              </div>
+            )
+          ))}
+        </>
+      ) : (
+        // Show single category when specific category is selected
+        <div className="space-y-8">
+          <h2 className="text-3xl font-bold text-white capitalize text-center">
+            {selectedCategory === 'steaks' ? 'Prime Steaks' : 
+             selectedCategory === 'appetizers' ? 'Appetizers' :
+             selectedCategory === 'sides' ? 'Sides' :
+             'Desserts'}
+          </h2>
+          {filteredItems.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredItems.map((item) => (
+                <MenuItemCard key={item.id} item={item} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-neutral-400 text-lg">
+                No items found in this category.
+              </p>
+            </div>
+          )}
         </div>
       )}
 
-      {/* Menu Items Grid */}
-      {filteredItems.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredItems.map((item) => (
-            <MenuItemCard key={item.id} item={item} />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-12">
-          <p className="text-neutral-400">
-            {menuItems.length === 0 
-              ? 'No menu items found.' 
-              : `No items found in the "${categories.find(c => c.key === activeCategory)?.label}" category.`
-            }
-          </p>
+      {/* Chef's Specials Section */}
+      {selectedCategory === 'all' && (
+        <div className="space-y-8 border-t border-neutral-700 pt-12">
+          <h2 className="text-3xl font-bold text-white text-center">
+            Chef's Specials
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {menuItems
+              .filter(item => item.metadata?.chefs_special === true)
+              .map((item) => (
+                <MenuItemCard key={`special-${item.id}`} item={item} isSpecial />
+              ))}
+          </div>
         </div>
       )}
     </div>

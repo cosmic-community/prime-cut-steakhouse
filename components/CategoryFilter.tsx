@@ -1,47 +1,35 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { MenuItem } from '@/types'
+import { MenuCategory } from '@/types'
 
 interface CategoryFilterProps {
-  menuItems: MenuItem[]
+  selectedCategory: MenuCategory | 'all'
+  onCategoryChange: (category: MenuCategory | 'all') => void
 }
 
-export default function CategoryFilter({ menuItems }: CategoryFilterProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [filteredItems, setFilteredItems] = useState<MenuItem[]>(menuItems)
+const categoryOptions: Array<{ key: MenuCategory | 'all'; label: string; emoji: string }> = [
+  { key: 'all', label: 'All Items', emoji: '🍽️' },
+  { key: 'steaks', label: 'Prime Steaks', emoji: '🥩' },
+  { key: 'appetizers', label: 'Appetizers', emoji: '🍤' },
+  { key: 'sides', label: 'Sides', emoji: '🥔' },
+  { key: 'desserts', label: 'Desserts', emoji: '🍰' }
+]
 
-  const categories = [
-    { key: 'all', value: 'All Items' },
-    { key: 'steaks', value: 'Steaks' },
-    { key: 'appetizers', value: 'Appetizers' },
-    { key: 'sides', value: 'Sides' },
-    { key: 'desserts', value: 'Desserts' }
-  ]
-
-  useEffect(() => {
-    if (selectedCategory === 'all') {
-      setFilteredItems(menuItems)
-    } else {
-      setFilteredItems(
-        menuItems.filter(item => item.metadata.category?.key === selectedCategory)
-      )
-    }
-  }, [selectedCategory, menuItems])
-
+export default function CategoryFilter({ selectedCategory, onCategoryChange }: CategoryFilterProps) {
   return (
     <div className="flex flex-wrap justify-center gap-4 mb-12">
-      {categories.map((category) => (
+      {categoryOptions.map(({ key, label, emoji }) => (
         <button
-          key={category.key}
-          onClick={() => setSelectedCategory(category.key)}
-          className={`px-6 py-3 rounded-lg border transition-all duration-200 ${
-            selectedCategory === category.key
-              ? 'bg-amber-600 border-amber-600 text-white'
-              : 'border-neutral-700 text-neutral-300 hover:border-amber-600 hover:text-amber-600'
+          key={key}
+          onClick={() => onCategoryChange(key)}
+          className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
+            selectedCategory === key
+              ? 'bg-accent-400 text-neutral-900 shadow-lg transform scale-105'
+              : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700 hover:text-white'
           }`}
         >
-          {category.value}
+          <span className="text-lg">{emoji}</span>
+          {label}
         </button>
       ))}
     </div>
