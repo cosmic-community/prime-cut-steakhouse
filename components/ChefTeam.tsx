@@ -20,15 +20,9 @@ export default function ChefTeam({ chefs }: ChefTeamProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {chefs.map((chef) => {
-            const name =
-              chef.metadata.name ?? chef.metadata.chef_name ?? chef.title
-            const imgUrl =
-              chef.metadata.image?.imgix_url ??
-              chef.metadata.chef_photo?.imgix_url
-            const years =
-              chef.metadata.experience_years ??
-              chef.metadata.years_experience ??
-              undefined
+            const name = chef.metadata.chef_name ?? chef.title
+            const imgUrl = chef.metadata.chef_photo?.imgix_url
+            const years = chef.metadata.years_experience
             const specialtiesVal = chef.metadata.specialties
             const specialtiesText = Array.isArray(specialtiesVal)
               ? specialtiesVal.join(', ')

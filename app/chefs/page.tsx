@@ -34,15 +34,9 @@ export default async function ChefsPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             {chefs.map((chef: ChefProfile) => {
-              const name =
-                chef.metadata.name ?? chef.metadata.chef_name ?? chef.title
-              const imgUrl =
-                chef.metadata.image?.imgix_url ??
-                chef.metadata.chef_photo?.imgix_url
-              const years =
-                chef.metadata.experience_years ??
-                chef.metadata.years_experience ??
-                undefined
+              const name = chef.metadata.chef_name ?? chef.title
+              const imgUrl = chef.metadata.chef_photo?.imgix_url
+              const years = chef.metadata.years_experience
               const specialtiesVal = chef.metadata.specialties
               const specialtiesText = Array.isArray(specialtiesVal)
                 ? specialtiesVal.join(', ')
