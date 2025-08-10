@@ -50,3 +50,5 @@ export interface ChefProfile {
     chef_photo?: CosmicMedia
   }
 }
+
+export type MenuCategory = 'appetizers' | 'entrees' | 'desserts' | 'beverages' | 'all'

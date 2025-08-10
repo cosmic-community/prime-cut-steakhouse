@@ -22,6 +22,22 @@ export async function getMenuItems(): Promise<MenuItem[]> {
   }
 }
 
+export async function getChefsSpecials(): Promise<MenuItem[]> {
+  try {
+    const { objects } = await cosmic.objects
+      .find({ type: 'menu-items', 'metadata.chefs_special': true })
+      .props('id,slug,title,metadata')
+      .depth(1)
+    
+    return objects as MenuItem[]
+  } catch (error: any) {
+    if (error.status === 404) {
+      return []
+    }
+    throw error
+  }
+}
+
 export async function getWinePairings(): Promise<WinePairing[]> {
   try {
     const { objects } = await cosmic.objects
@@ -52,4 +68,9 @@ export async function getChefs(): Promise<ChefProfile[]> {
     }
     throw error
   }
+}
+
+export async function getChefProfiles(): Promise<ChefProfile[]> {
+  // This is an alias for getChefs() to match the import in page.tsx
+  return getChefs()
 }
