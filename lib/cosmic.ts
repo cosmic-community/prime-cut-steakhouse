@@ -9,7 +9,7 @@ if (!bucketSlug || !readKey) {
   throw new Error('Missing required Cosmic environment variables. Please check COSMIC_BUCKET_SLUG and COSMIC_READ_KEY are set.')
 }
 
-const cosmic = createBucketClient({
+export const cosmic = createBucketClient({
   bucketSlug,
   readKey,
   apiEnvironment: "staging"
