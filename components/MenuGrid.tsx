@@ -68,8 +68,8 @@ export default function MenuGrid({ menuItems }: MenuGridProps) {
       {selectedCategory === 'all' ? (
         // Show all categories when 'all' is selected
         <>
-          {Object.entries(itemsByCategory).map(([category, items]) => (
-            items.length > 0 && (
+          {Object.entries(itemsByCategory).map(([category, items]) => 
+            items && items.length > 0 ? (
               <div key={category} className="space-y-8">
                 <h2 className="text-3xl font-bold text-white capitalize text-center">
                   {category === 'steaks' ? 'Prime Steaks' : 
@@ -83,8 +83,8 @@ export default function MenuGrid({ menuItems }: MenuGridProps) {
                   ))}
                 </div>
               </div>
-            )
-          ))}
+            ) : null
+          )}
         </>
       ) : (
         // Show single category when specific category is selected
