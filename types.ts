@@ -32,6 +32,9 @@ export interface MenuItem extends CosmicObject {
   };
 }
 
+// Menu Item with Wine (alias for MenuItem with wine pairing)
+export type MenuItemWithWine = MenuItem;
+
 // Wine Pairing interface
 export interface WinePairing extends CosmicObject {
   type: 'wine-pairings';
