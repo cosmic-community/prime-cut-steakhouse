@@ -9,10 +9,9 @@ export interface CosmicObject {
   created_at: string;
   modified_at: string;
   status: string;
-  published_at: string;
+  published_at?: string;
   bucket?: string;
   thumbnail?: string;
-  published_at?: string;
   modified_by?: string;
   created_by?: string;
 }
