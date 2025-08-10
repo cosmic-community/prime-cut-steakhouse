@@ -18,7 +18,7 @@ export default function Header() {
             <a href="/menu" className="text-gray-300 hover:text-white transition-colors">Menu</a>
             <a href="/chefs" className="text-gray-300 hover:text-white transition-colors">Our Chefs</a>
             <a href="/wine" className="text-gray-300 hover:text-white transition-colors">Wine</a>
-            <a href="#contact" className="text-gray-300 hover:text-white transition-colors">Contact</a>
+            <a href="/contact" className="text-gray-300 hover:text-white transition-colors">Contact</a>
           </div>
 
           <button
@@ -37,7 +37,7 @@ export default function Header() {
             <a href="/menu" className="block text-gray-300 hover:text-white transition-colors py-2">Menu</a>
             <a href="/chefs" className="block text-gray-300 hover:text-white transition-colors py-2">Our Chefs</a>
             <a href="/wine" className="block text-gray-300 hover:text-white transition-colors py-2">Wine</a>
-            <a href="#contact" className="block text-gray-300 hover:text-white transition-colors py-2">Contact</a>
+            <a href="/contact" className="block text-gray-300 hover:text-white transition-colors py-2">Contact</a>
           </div>
         )}
       </nav>
