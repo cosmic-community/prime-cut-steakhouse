@@ -1,38 +1,36 @@
-import { getMenuItems } from '@/lib/cosmic'
+import { Suspense } from 'react'
 import MenuGrid from '@/components/MenuGrid'
-import CategoryFilter from '@/components/CategoryFilter'
 
-export const metadata = {
-  title: 'Menu | Prime Cut Steakhouse',
-  description: 'Explore our carefully crafted menu featuring premium dry-aged steaks, appetizers, sides, and desserts.',
-}
-
-export default async function MenuPage() {
-  const menuItems = await getMenuItems()
-
-  if (menuItems.length === 0) {
-    return (
-      <div className="container section-padding">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Our Menu</h1>
-          <p className="text-neutral-400">Menu items will appear here.</p>
-        </div>
-      </div>
-    )
-  }
-
+export default function MenuPage() {
   return (
-    <div className="container section-padding">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl lg:text-5xl font-bold mb-6">Our Menu</h1>
-        <p className="text-xl text-neutral-300 max-w-3xl mx-auto">
-          Discover our carefully curated selection of premium steaks, appetizers, sides, 
-          and desserts, each crafted with the finest ingredients and expert technique.
-        </p>
-      </div>
+    <main className="min-h-screen bg-neutral-900">
+      {/* Header spacing */}
+      <div className="h-20"></div>
       
-      <CategoryFilter menuItems={menuItems} />
-      <MenuGrid items={menuItems} />
-    </div>
+      {/* Menu Section */}
+      <section className="py-16">
+        <div className="container">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Our Menu
+            </h1>
+            <p className="text-xl text-neutral-400 max-w-3xl mx-auto">
+              Discover our carefully curated selection of premium steaks, appetizers, sides, 
+              and desserts, each crafted with the finest ingredients and expert technique.
+            </p>
+          </div>
+
+          {/* Menu Grid with built-in category filter */}
+          <Suspense fallback={
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-accent-400"></div>
+            </div>
+          }>
+            <MenuGrid />
+          </Suspense>
+        </div>
+      </section>
+    </main>
   )
 }
