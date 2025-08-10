@@ -25,6 +25,20 @@ export interface MenuItem extends CosmicObject {
     spice_level?: number;
     featured?: boolean;
     available?: boolean;
+    dish_name?: string;
+    dish_photo?: {
+      imgix_url: string;
+      alt_text?: string;
+    };
+    wine_pairing?: {
+      metadata: {
+        wine_name: string;
+        vineyard: string;
+        year: string;
+        price_per_glass?: string;
+      };
+    };
+    chefs_special?: boolean;
   };
 }
 
@@ -43,6 +57,9 @@ export interface Chef extends CosmicObject {
     signature_dish?: string;
   };
 }
+
+// Add missing ChefProfile type (alias for Chef)
+export type ChefProfile = Chef;
 
 export interface WineItem extends CosmicObject {
   metadata: {
@@ -63,6 +80,12 @@ export interface WineItem extends CosmicObject {
     awards?: string[];
   };
 }
+
+// Add missing WinePairing type (alias for WineItem)
+export type WinePairing = WineItem;
+
+// Add missing MenuCategory type
+export type MenuCategory = 'steaks' | 'appetizers' | 'sides' | 'desserts';
 
 // Contact Form Types
 export interface ContactFormData {

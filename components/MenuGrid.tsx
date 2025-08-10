@@ -17,9 +17,16 @@ export default function MenuGrid({ menuItems }: MenuGridProps) {
     if (selectedCategory === 'all') {
       return menuItems
     }
-    return menuItems.filter(item => 
-      item.metadata?.category?.key === selectedCategory
-    )
+    return menuItems.filter(item => {
+      const category = item.metadata?.category
+      if (typeof category === 'string') {
+        return category === selectedCategory
+      }
+      if (typeof category === 'object' && category && 'key' in category) {
+        return (category as any).key === selectedCategory
+      }
+      return false
+    })
   }, [menuItems, selectedCategory])
 
   // Group items by category for display
@@ -32,7 +39,15 @@ export default function MenuGrid({ menuItems }: MenuGridProps) {
     }
 
     filteredItems.forEach(item => {
-      const categoryKey = item.metadata?.category?.key
+      const category = item.metadata?.category
+      let categoryKey: string | undefined
+      
+      if (typeof category === 'string') {
+        categoryKey = category
+      } else if (typeof category === 'object' && category && 'key' in category) {
+        categoryKey = (category as any).key
+      }
+      
       if (categoryKey && categories[categoryKey]) {
         categories[categoryKey].push(item)
       }

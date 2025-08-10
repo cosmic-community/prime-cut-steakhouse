@@ -64,7 +64,7 @@ export async function sendContactNotification(data: ContactFormData): Promise<{ 
       to: RECIPIENT_EMAIL,
       subject: subject,
       html: emailContent,
-      replyTo: data.email,
+      reply_to: data.email,
     });
 
     if (result.error) {

@@ -15,23 +15,30 @@ export default function MenuItemCard({ item, isSpecial = false, featured = false
 
   const {
     dish_name,
+    name,
     description,
     price,
     dish_photo,
+    image,
     wine_pairing,
     chefs_special
   } = metadata
+
+  // Use dish_name if available, otherwise fall back to name or title
+  const displayName = dish_name || name || item.title
+  // Use dish_photo if available, otherwise fall back to image
+  const displayImage = dish_photo || image
 
   return (
     <div className={`bg-neutral-800 rounded-lg overflow-hidden hover:bg-neutral-750 transition-colors duration-300 ${
       isSpecial || chefs_special || featured ? 'ring-2 ring-accent-400' : ''
     }`}>
       {/* Dish Photo */}
-      {dish_photo?.imgix_url && (
+      {displayImage?.imgix_url && (
         <div className="aspect-w-16 aspect-h-12 overflow-hidden">
           <img
-            src={`${dish_photo.imgix_url}?w=600&h=400&fit=crop&auto=format,compress`}
-            alt={dish_name || item.title}
+            src={`${displayImage.imgix_url}?w=600&h=400&fit=crop&auto=format,compress`}
+            alt={displayImage.alt_text || displayName}
             className="w-full h-48 object-cover"
             width={600}
             height={400}
@@ -50,10 +57,10 @@ export default function MenuItemCard({ item, isSpecial = false, featured = false
         {/* Dish Info */}
         <div className="flex justify-between items-start mb-3">
           <h3 className="text-xl font-bold text-white">
-            {dish_name || item.title}
+            {displayName}
           </h3>
           <span className="text-2xl font-bold text-accent-400 ml-4 flex-shrink-0">
-            {price}
+            ${price}
           </span>
         </div>
 
@@ -77,7 +84,7 @@ export default function MenuItemCard({ item, isSpecial = false, featured = false
               </p>
               {wine_pairing.metadata.price_per_glass && (
                 <p className="text-accent-400 font-medium mt-1">
-                  {wine_pairing.metadata.price_per_glass} glass
+                  ${wine_pairing.metadata.price_per_glass} glass
                 </p>
               )}
             </div>
